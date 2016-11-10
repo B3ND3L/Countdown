@@ -1,12 +1,12 @@
 package com.delahais.benjamin;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +18,11 @@ public class CountDown extends HttpServlet {
 		throws ServletException, IOException {
 		String diff = diff();
 		request.setAttribute( "diff", diff );
+				
+		/*Cookie cookie = new Cookie("UserID", "");
+		cookie.setMaxAge(60*60); //1 hour
+		response.addCookie(cookie);*/
+		
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/CountDownView.jsp" ).forward( request, response );
 	}
 	
