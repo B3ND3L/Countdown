@@ -1,9 +1,8 @@
 package com.delahais.benjamin;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Timer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -12,38 +11,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class CountDown extends HttpServlet {
+	
+	private WebSocketServer connector;
+	private ArrayList<Compteur> al;
+	
+	public CountDown() {
+		
+		connector = new WebSocketServer();
+		al = new ArrayList<Compteur>();
+		
+		al.add(new Compteur(0,"Guarana","12/12/2016 05:55:12"));
+		al.add(new Compteur(1,"Guacamole","12/12/2016 05:55:12"));
+		
+		MiseAJour maj = new MiseAJour(connector, al);
+		
+		Timer timer = new Timer(true);
+		timer.schedule(maj, 1000, 1000);
+	}
 
 	@Override
 	public void doGet( HttpServletRequest request, HttpServletResponse response )
 		throws ServletException, IOException {
-		String diff = diff();
-		request.setAttribute( "diff", diff );
-				
-		/*Cookie cookie = new Cookie("UserID", "");
-		cookie.setMaxAge(60*60); //1 hour
-		response.addCookie(cookie);*/
+		
+		request.setAttribute( "compteurs", al);
+		
+		//request.getCookies();
+			
 		
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/CountDownView.jsp" ).forward( request, response );
-	}
-	
-	private String diff(){
-		String theDate = "02/11/2016 17:30:00";
-		String pattern = "dd/MM/yyyy HH:mm:ss";
-		Date d2 = null;
-		try {
-			d2 = new SimpleDateFormat(pattern).parse(theDate);
-		} catch (ParseException e) {
-			return "server error...";
-		}
-		Date d1 = new Date();
-
-		long diff = d2.getTime() - d1.getTime();
-
-		long diffSeconds = diff / 1000 % 60;
-		long diffMinutes = diff / (60 * 1000) % 60;
-		long diffHours = diff / (60 * 60 * 1000) % 24;
-		long diffDays = diff / (24 * 60 * 60 * 1000);
-		return diffDays+" jour(s) "+diffHours+" heure(s) "+diffMinutes+" minute(s) "+diffSeconds+" seconde(s)";
-
 	}
 }
