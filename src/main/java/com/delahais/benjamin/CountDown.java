@@ -2,7 +2,6 @@ package com.delahais.benjamin;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Timer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -21,9 +20,6 @@ public class CountDown extends HttpServlet {
 		connector = new WebSocketServer();
 		al = new ArrayList<Compteur>();
 		
-		al.add(new Compteur(0,"Guarana","12/12/2016 05:55:12"));
-		al.add(new Compteur(1,"Guacamole","12/12/2016 05:55:12"));
-		
 		CD = this;
 	}
 
@@ -31,15 +27,19 @@ public class CountDown extends HttpServlet {
 		return al;
 	}
 	
+	public void addCompteur(String json){
+		al.add(new Compteur(6, "caca", "31/06/2017 12:50:34"));
+		//al.add(Compteur.JSONtoCompteur(json));
+	}
+	
 	@Override
 	public void doGet( HttpServletRequest request, HttpServletResponse response )
 		throws ServletException, IOException {
 		
-		request.setAttribute( "compteurs", al);
+		request.setAttribute("compteurs", al);
 		
-		//request.getCookies();
-			
-		
+		//Cookie [] cookies = request.getCookies();
+				
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/CountDownView.jsp" ).forward( request, response );
 	}
 	

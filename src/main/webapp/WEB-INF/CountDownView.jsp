@@ -39,14 +39,32 @@
 		
 		socket.onmessage = function(e){
 			//on modifie les compteurs affichés
-			console.log("NEW MESSAGE")
-			console.log(e.data);
+			var json = JSON.parse(e.data);
+			json.compteurs.forEach( function (c) {
+				if(c.diff !== 'undefined'){
+					document.getElementById(c.id).innerHTML = "<td>"+c.name+"</td><td>"+c.deadline+"</td><td>"+c.diff+"</td>";
+				}
+			});
 		} 
 		
 		socket.onclose = function(e){} 
 		
 		socket.onerror = function(e){}
 		
+		function nouveauCompteur(){
+			var json = {
+					id : document.getElementById("id").value,
+					name : document.getElementById("name").value, 
+					deadline : document.getElementById("dpt").value,
+				};
+				
+			socket.send(json);
+				
+			//Create cookies
+			document.cookie = "compteurs="+JSON.stringify(json); 
+			console.log(document.cookie);
+		}
+				
 	</script>
 </head>
 
@@ -57,14 +75,25 @@
 	for(Compteur c : al){
 		
 		out.println("<div class=\"row\"><div class=\"small-10 columns\">"
-		+"<table><tr style=\"background-color:"+ ((i%2==0)?"#EEE":"#CCC") +"\"><td>"+c.getName()+"</td><td>"+c.getDeadLine()+"</td></tr></table>"
+		+"<table><tr id=\""+ c.getId() +"\" style=\"background-color:"+ ((i%2==0)?"#EEE":"#CCC") +"\"><td>"+c.getName()+"</td><td>"+c.getDeadLine()+"</td></tr></table>"
 		+"</div></div>");
 		i++;
 	}
 %>
 	<div class="row">
 		<div class="small-2 columns">
+			<input type="text" placeholder="id" id="id" />
+		</div>
+		<div class="small-3 columns">
+			<input type="text" placeholder="name" id="name"/>
+		</div>
+		<div class="small-3 columns">
 			<input type="text" class="span2" value="<% out.print(request.getAttribute("date")); %>" id="dpt" />
+		</div>
+		<div class="small-2 columns">
+			<a href="#" onclick ="nouveauCompteur()" class="button">Nouveau</a>
+		</div>
+		<div class="small-2 columns">
 		</div>
 	</div>
 	

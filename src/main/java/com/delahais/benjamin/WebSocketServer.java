@@ -46,10 +46,6 @@ public class WebSocketServer {
      */
     @OnMessage
     public void onMessage(String message, Session userSession) {
-        System.out.println("Message Received: " + message);
-        for (Session session : userSessions) {
-            System.out.println("Sending to " + session.getId());
-            session.getAsyncRemote().sendText(message);
-        }
+        CountDown.getItSelf().addCompteur(message);
     }
 }

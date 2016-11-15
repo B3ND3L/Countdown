@@ -8,6 +8,10 @@ import java.util.TimerTask;
 
 import javax.websocket.Session;
 
+import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONStringer;
+
 
 public class MiseAJour extends TimerTask {
 	
@@ -22,12 +26,16 @@ public class MiseAJour extends TimerTask {
 	@Override
 	public void run() {
 		
-		String str = "{Compteurs:[";
+		JSONObject json = new JSONObject();
+		JSONArray jList = new JSONArray();
+		
 		for(Compteur c: CountDown.getItSelf().getCompteurs()){
-			str += "{id:"+c.getId()+",diff:"+diff(c.getDeadLine())+"},";
+			jList.put(c.toJSON(diff(c.getDeadLine())));
 		}
-		str += "]}";
-		userSession.getAsyncRemote().sendText(str);
+		
+		json.put("compteurs", jList);
+						
+		userSession.getAsyncRemote().sendText(json.toString());
 	}
 
 	private String diff(String theDate){
