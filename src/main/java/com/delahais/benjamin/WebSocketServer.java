@@ -49,8 +49,4 @@ public class WebSocketServer {
             session.getAsyncRemote().sendText(message);
         }
     }
-    
-    public void sendMessage(String message){
-    	
-    }
 }
