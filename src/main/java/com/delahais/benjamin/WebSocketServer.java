@@ -3,7 +3,8 @@ package com.delahais.benjamin;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
- 
+import java.util.Timer;
+
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
@@ -14,7 +15,7 @@ import javax.websocket.server.ServerEndpoint;
 public class WebSocketServer {
     
     private Set<Session> userSessions = Collections.synchronizedSet(new HashSet<Session>());
- 
+        
     /**
      * Callback hook for Connection open events. This method will be invoked when a 
      * client requests for a WebSocket connection.
@@ -23,6 +24,8 @@ public class WebSocketServer {
     @OnOpen
     public void onOpen(Session userSession) {
         userSessions.add(userSession);
+        Timer timer = new Timer(true);
+		timer.schedule(new MiseAJour(userSession), 1000, 1000);
     }
      
     /**

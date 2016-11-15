@@ -6,21 +6,28 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimerTask;
 
+import javax.websocket.Session;
+
 
 public class MiseAJour extends TimerTask {
 	
-	protected WebSocketServer connector;
+	protected Session userSession;
 	protected ArrayList<Compteur> compteurs;
 	
-	public MiseAJour(WebSocketServer connector, ArrayList<Compteur> compteurs) {
+	public MiseAJour(Session userSession) {
 		
-		this.connector = connector;
-		this.compteurs = compteurs;
+		this.userSession = userSession;
 	}
 
 	@Override
 	public void run() {
-				
+		
+		String str = "{Compteurs:[";
+		for(Compteur c: CountDown.getItSelf().getCompteurs()){
+			str += "{id:"+c.getId()+",diff:"+diff(c.getDeadLine())+"},";
+		}
+		str += "]}";
+		userSession.getAsyncRemote().sendText(str);
 	}
 
 	private String diff(String theDate){

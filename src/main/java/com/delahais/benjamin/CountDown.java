@@ -14,6 +14,7 @@ public class CountDown extends HttpServlet {
 	
 	private WebSocketServer connector;
 	private ArrayList<Compteur> al;
+	private static CountDown CD;
 	
 	public CountDown() {
 		
@@ -23,12 +24,13 @@ public class CountDown extends HttpServlet {
 		al.add(new Compteur(0,"Guarana","12/12/2016 05:55:12"));
 		al.add(new Compteur(1,"Guacamole","12/12/2016 05:55:12"));
 		
-		MiseAJour maj = new MiseAJour(connector, al);
-		
-		Timer timer = new Timer(true);
-		timer.schedule(maj, 1000, 1000);
+		CD = this;
 	}
 
+	public ArrayList<Compteur> getCompteurs(){
+		return al;
+	}
+	
 	@Override
 	public void doGet( HttpServletRequest request, HttpServletResponse response )
 		throws ServletException, IOException {
@@ -39,5 +41,10 @@ public class CountDown extends HttpServlet {
 			
 		
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/CountDownView.jsp" ).forward( request, response );
+	}
+	
+	public static CountDown getItSelf(){
+		
+		return CD;
 	}
 }

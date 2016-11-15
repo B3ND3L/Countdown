@@ -7,9 +7,14 @@
 	<meta charset="utf-8" />
 	<title>CountDown</title>
 	
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/6.2.4/foundation.min.css">
-	<script src="https://cdn.jsdelivr.net/foundation/6.2.4/foundation.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/foundation/6.2.4/foundation.min.css" rel="stylesheet">
+	<link href="https://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/foundation-datepicker/1.5.5/css/foundation-datepicker.min.css" rel="stylesheet">
+	
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/foundation/6.2.4/foundation.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/foundation-datepicker/1.5.5/js/foundation-datepicker.min.js"></script>
 	
 	<style>
 		blockquote {
@@ -35,7 +40,7 @@
 		socket.onmessage = function(e){
 			//on modifie les compteurs affichés
 			console.log("NEW MESSAGE")
-			console.log(e);
+			console.log(e.data);
 		} 
 		
 		socket.onclose = function(e){} 
@@ -46,17 +51,32 @@
 </head>
 
 <body>
-
 <% 
 	ArrayList<Compteur> al = (ArrayList<Compteur>)request.getAttribute("compteurs");
 	int i = 0;
 	for(Compteur c : al){
 		
-		out.println("<div class=\"row\"><div class=\"small-12 columns\">"
+		out.println("<div class=\"row\"><div class=\"small-10 columns\">"
 		+"<table><tr style=\"background-color:"+ ((i%2==0)?"#EEE":"#CCC") +"\"><td>"+c.getName()+"</td><td>"+c.getDeadLine()+"</td></tr></table>"
 		+"</div></div>");
 		i++;
 	}
 %>
+	<div class="row">
+		<div class="small-2 columns">
+			<input type="text" class="span2" value="<% out.print(request.getAttribute("date")); %>" id="dpt" />
+		</div>
+	</div>
+	
+<script>
+$(function(){
+  $('#dpt').fdatepicker({
+		format: 'mm-dd-yyyy hh:ii',
+		disableDblClickSelection: true,
+		language: 'vi',
+		pickTime: true
+	});
+});
+</script>
 </body>
 </html>
