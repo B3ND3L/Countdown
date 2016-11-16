@@ -35,7 +35,12 @@
     	<groupId>org.json</groupId>
     	<artifactId>json</artifactId>
     	<version>20160810</version>
-    </dependency>
+    </dependency>	
+	<dependency>
+	    <groupId>org.xerial</groupId>
+	    <artifactId>sqlite-jdbc</artifactId>
+	    <version>3.15.1</version>
+	</dependency>
   </dependencies>
   <build>
     <finalName>Countdown</finalName>
