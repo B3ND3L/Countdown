@@ -31,10 +31,12 @@
 		}
 	</style>
 	<script>
-		var socket = new WebSocket("ws://localhost:8080/Countdown/cws");
+		var socket = new WebSocket("ws://<% out.print(request.getAttribute("ip"));%>:8080/Countdown/cws");
+		<% out.print("var userId = \""+request.getAttribute("userId")+"\""); %>
 		
 		socket.onopen = function(e){
 			console.log(e);
+			socket.send("start-"+userId);
 		} /*on "écoute" pour savoir si la connexion vers le serveur websocket s'est bien faite */
 		
 		socket.onmessage = function(e){
@@ -53,18 +55,13 @@
 		
 		function nouveauCompteur(){
 			var json = {
-					id : document.getElementById("id").value,
 					name : document.getElementById("name").value, 
 					deadline : document.getElementById("dpt").value,
 				};
 				
-			socket.send(json);
-				
-			//Create cookies
-			document.cookie = "compteurs="+JSON.stringify(json); 
-			console.log(document.cookie);
+			socket.send(userId+"£"+JSON.stringify(json));
+			location.reload();
 		}
-				
 	</script>
 </head>
 
@@ -81,13 +78,10 @@
 	}
 %>
 	<div class="row">
-		<div class="small-2 columns">
-			<input type="text" placeholder="id" id="id" />
-		</div>
-		<div class="small-3 columns">
+		<div class="small-4 columns">
 			<input type="text" placeholder="name" id="name"/>
 		</div>
-		<div class="small-3 columns">
+		<div class="small-4 columns">
 			<input type="text" class="span2" value="<% out.print(request.getAttribute("date")); %>" id="dpt" />
 		</div>
 		<div class="small-2 columns">
@@ -100,7 +94,7 @@
 <script>
 $(function(){
   $('#dpt').fdatepicker({
-		format: 'mm-dd-yyyy hh:ii',
+		format: 'dd/mm/yyyy hh:ii:ss',
 		disableDblClickSelection: true,
 		language: 'vi',
 		pickTime: true

@@ -24,8 +24,6 @@ public class WebSocketServer {
     @OnOpen
     public void onOpen(Session userSession) {
         userSessions.add(userSession);
-        Timer timer = new Timer(true);
-		timer.schedule(new MiseAJour(userSession), 1000, 1000);
     }
      
     /**
@@ -46,6 +44,19 @@ public class WebSocketServer {
      */
     @OnMessage
     public void onMessage(String message, Session userSession) {
-        CountDown.getItSelf().addCompteur(message);
+    	System.out.println("ooooooooooooooooooo");
+    	if(message.contains("£")){
+    		String [] messages = message.split("£");
+    	    
+    		for(String str : messages) System.out.println(str);
+    		
+    		CountDown.getItSelf().addCompteur(messages[0], messages[1]);
+    	
+    	} else if(message.contains("start")) {
+    	
+    		String [] messages = message.split("-");
+    		Timer timer = new Timer(true);
+    		timer.schedule(new MiseAJour(userSession, messages[1]), 1000, 1000);
+    	}
     }
 }

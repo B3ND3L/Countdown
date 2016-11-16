@@ -4,13 +4,14 @@ import org.json.JSONObject;
 
 public class Compteur {
 
+	public static int IDS = 0;
 	protected int id;
 	protected String name;
 	protected String deadLine;
 	
-	public Compteur(int id, String name, String deadLine) {
+	public Compteur(String name, String deadLine) {
 		super();
-		this.id = id;
+		this.id = IDS++;
 		this.name = name;
 		this.deadLine = deadLine;
 	}
@@ -45,6 +46,10 @@ public class Compteur {
 	
 	public static Compteur JSONtoCompteur(String str){
 		JSONObject json = new JSONObject(str);
-		return new Compteur(json.getInt("id"),json.getString("name"),json.getString("deadline"));
+		return new Compteur(json.getString("name"),json.getString("deadline"));
+	}
+	
+	public String toString(){
+		return id+" "+name+" "+deadLine;
 	}
 }
