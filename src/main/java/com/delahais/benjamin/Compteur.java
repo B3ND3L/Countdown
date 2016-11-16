@@ -16,6 +16,13 @@ public class Compteur {
 		this.deadLine = deadLine;
 	}
 	
+	public Compteur(int id, String name, String deadLine) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.deadLine = deadLine;
+	}
+	
 	public int getId() {
 		return id;
 	}
