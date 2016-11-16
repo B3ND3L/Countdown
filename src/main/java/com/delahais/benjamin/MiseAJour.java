@@ -1,5 +1,6 @@
 package com.delahais.benjamin;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,8 +32,12 @@ public class MiseAJour extends TimerTask {
 		JSONObject json = new JSONObject();
 		JSONArray jList = new JSONArray();
 		
-		for(Compteur c: CountDown.getItSelf().getCompteurs(userId)){
-			jList.put(c.toJSON(diff(c.getDeadLine())));
+		try {
+			for(Compteur c: CountDown.getItSelf().getCompteurs(userId)){
+				jList.put(c.toJSON(diff(c.getDeadLine())));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		json.put("compteurs", jList);

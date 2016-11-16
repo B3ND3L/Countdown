@@ -1,5 +1,6 @@
 package com.delahais.benjamin;
 
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,9 +42,10 @@ public class WebSocketServer {
      * send a message.
      * @param message The text message
      * @param userSession The session of the client
+     * @throws SQLException 
      */
     @OnMessage
-    public void onMessage(String message, Session userSession) {
+    public void onMessage(String message, Session userSession) throws SQLException {
     	System.out.println("ooooooooooooooooooo");
     	if(message.contains("£")){
     		String [] messages = message.split("£");

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.security.SecureRandom;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,15 +28,17 @@ public class CountDown extends HttpServlet {
 		CD = this;
 	}
 
-	public ArrayList<Compteur> getCompteurs(String user){
+	public ArrayList<Compteur> getCompteurs(String user) throws SQLException{
 		//SELECTION BASE DE DONNEE
-		return null;
+		
+		return db.requeteCapteur(user);
 	}
 	
-	public void addCompteur(String user, String json){
+	public void addCompteur(String user, String json) throws SQLException{
 		
 		Compteur cpt = Compteur.JSONtoCompteur(json);
 		//Envoi du compteur dans la BDD
+		db.insert(user, cpt);
 	}
 	
 	@Override
