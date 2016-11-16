@@ -57,7 +57,11 @@ public class CountDown extends HttpServlet {
 		}
 		
 		//RECUPERATION DES COMPTEURS PAR LA BDD
-		//request.setAttribute("compteurs", users.get(userId));
+		try {
+			request.setAttribute("compteurs", getCompteurs(userId));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		request.setAttribute("userId", userId);
 		request.setAttribute("ip", InetAddress.getLocalHost().getHostAddress());
