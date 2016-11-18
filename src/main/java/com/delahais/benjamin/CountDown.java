@@ -7,7 +7,9 @@ import java.security.SecureRandom;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -70,6 +72,11 @@ public class CountDown extends HttpServlet {
 		request.setAttribute("userid", userid);
 		request.setAttribute("ip", InetAddress.getLocalHost().getHostAddress());
 		
+		String[] fuseauxHorairesDisponible  = TimeZone.getAvailableIDs();
+        // trier la liste
+        Arrays.sort(fuseauxHorairesDisponible);
+		request.setAttribute("fuseaux", fuseauxHorairesDisponible);
+ 
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/CountDownView.jsp" ).forward( request, response );
 	}
 	

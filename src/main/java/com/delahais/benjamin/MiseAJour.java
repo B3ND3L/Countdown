@@ -26,6 +26,7 @@ public class MiseAJour extends TimerTask {
 	protected HashMap<String, String> heures;
 	protected HashMap<String, String> minutes;
 	protected HashMap<String, String> secondes;
+	protected HashMap<String, String> reste;
 	
 	public MiseAJour(Session userSession, String userid) {
 		
@@ -38,20 +39,24 @@ public class MiseAJour extends TimerTask {
 		jours.put("it", "giorni");
 		
 		heures= new HashMap<>();
-		heures.put("en", "hours");heures.put("fr", "heures");heures.put("de", "Stunden");heures.put("es", "días");
-		heures.put("pt", "dias");heures.put("ar", "أيام");heures.put("zh", "小时");heures.put("ja", "営業時間");
-		heures.put("it", "giorni");
+		heures.put("en", "hours");heures.put("fr", "heures");heures.put("de", "Stunden");heures.put("es", "horas");
+		heures.put("pt", "horas");heures.put("ar", "ساعات");heures.put("zh", "点钟");heures.put("ja", "時");
+		heures.put("it", "ore");
 		
 		minutes= new HashMap<>();
-		minutes.put("en", "minutes");minutes.put("fr", "minutes");minutes.put("de", "Minuten");minutes.put("es", "días");
-		minutes.put("pt", "dias");minutes.put("ar", "أيام");minutes.put("zh", "分钟");minutes.put("ja", "分");
-		minutes.put("it", "giorni");
+		minutes.put("en", "minutes");minutes.put("fr", "minutes");minutes.put("de", "Minuten");minutes.put("es", "minutos");
+		minutes.put("pt", "minutos");minutes.put("ar", "دقيقة");minutes.put("zh", "分钟");minutes.put("ja", "分");
+		minutes.put("it", "minuti");
 		
 		secondes= new HashMap<>();
-		secondes.put("en", "seconds");secondes.put("fr", "secondes");secondes.put("de", "Sekunden");secondes.put("es", "días");
-		secondes.put("pt", "dias");secondes.put("ar", "أيام");secondes.put("zh", "秒");secondes.put("ja", "秒");
-		secondes.put("it", "giorni");
+		secondes.put("en", "seconds");secondes.put("fr", "secondes");secondes.put("de", "Sekunden");secondes.put("es", "segundos");
+		secondes.put("pt", "segundos");secondes.put("ar", "ثواني");secondes.put("zh", "秒");secondes.put("ja", "秒");
+		secondes.put("it", "secondi");
 		
+		reste = new HashMap<>();
+		reste.put("en", "left");reste.put("fr", "restants");reste.put("de", "Rest");reste.put("es", "restantes");
+		reste.put("pt", "restantes");reste.put("ar", "المتبقية");reste.put("zh", "剩馀");reste.put("ja", "残り");
+		reste.put("it", "rimanenti");
 	}
 
 	@Override
@@ -62,7 +67,7 @@ public class MiseAJour extends TimerTask {
 		
 		try {
 			for(Compteur c: CountDown.getItSelf().getCompteurs(userid)){
-				jList.put(c.toJSON(diff(c.getDeadLine(), c.getLocale())));
+				jList.put(c.toJSON(diff(c.getDeadLine(), c.getLangue())));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -95,8 +100,12 @@ public class MiseAJour extends TimerTask {
 		long diffMinutes = diff / (60 * 1000) % 60;
 		long diffHours = diff / (60 * 60 * 1000) % 24;
 		long diffDays = diff / (24 * 60 * 60 * 1000);
-		return diffDays+" "+jours.get(lang)+" "+diffHours+" "+heures.get(lang)+" "+diffMinutes+" "+minutes.get(lang)+" "+diffSeconds+" "+secondes.get(lang);
-
+		
+		
+		return (lang.equals("ar")?reste.get(lang)+" ":"")+diffDays+" "+jours.get(lang)
+				+" "+diffHours+" "+heures.get(lang)+" "+diffMinutes+" "+minutes.get(lang)
+				+" "+diffSeconds+" "+secondes.get(lang)+" "+(!lang.equals("ar")?reste.get(lang):"");
+		
 	}
 	
 }

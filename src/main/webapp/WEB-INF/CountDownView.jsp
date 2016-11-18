@@ -21,9 +21,8 @@
 		var socket = new WebSocket("ws://<% out.print(request.getAttribute("ip"));%>:8080/Countdown/cws");
 		<% out.print("var userid = \""+request.getAttribute("userid")+"\""); %>
 		
-		var langues = {"Français":"fr","Español":"es","Deutsch":"de","中国":"zh","日本の":"ja","American":"us",
-					   "English":"en", "مغربي":"ar","التونسية":"ar","Italiano":"it","português":"pt",
-					   "Mexicano":"es"};
+		var langues = { "Français":"fr","English":"en","Deutsch":"de","Español":"es","العربية":"ar",
+				"Italiano":"it","português":"pt","中国":"zh","日本の":"ja"};
 				
 		socket.onopen = function(e){
 			console.log(e);
@@ -37,7 +36,7 @@
 				document.getElementById(c.id).innerHTML = "<td>"+c.name+"</td>"
 				+"<td>"+c.deadline+"</td>"
 				+"<td>"+c.diff+"</td>"
-				+"<td>"+getPays(c.locale)+"</td>"
+				+"<td>"+getPays(c.langue)+"</td>"
 				+"<td><a href=\"#\" name=\""+userid+"-"+c.id+"\"class=\"button\"" 
 				+"onclick=\"supprCompteur(this)\"><i class=\"fa fa-times fa-2x\"></i></a></td>";
 			});
@@ -46,9 +45,9 @@
 		socket.onclose = function(e){} 
 		socket.onerror = function(e){alert('Connexion lost !');location.reload();}
 		
-		function getPays(locale){
+		function getPays(langue){
 			for(var pays in langues){
-				if (langues[pays] === locale) return pays;
+				if (langues[pays] === langue) return pays;
 			}
 		}
 		
@@ -56,10 +55,10 @@
 			var json = {
 					name : document.getElementById("name").value, 
 					deadline : document.getElementById("dpt").value,
-					locale : document.getElementById("locale").value,
+					langue : document.getElementById("langue").value,
 				};
 			socket.send(userid+"£"+JSON.stringify(json));
-			location.reload();
+			setTimeout(function(){location.reload();}, 250);
 		}
 		
 		function supprCompteur(elem){
@@ -78,6 +77,7 @@
 					<th>Name</th>
 					<th>DeadLine</th>
 					<th>Countdown</th>
+					<th>Fuseau Horaire</th>
 					<th>Langue</th>
 					<th>Close</th>
 				</tr>
@@ -100,29 +100,40 @@
 		<table><tr>
 			<td><input type="text" placeholder="name" id="name"/></td>
 			<td><input type="text" class="span2" value="<% out.print(request.getAttribute("date")); %>" id="dpt" /></td>
+			<td><select id="langue">
+				<option value="fr">Choisir une langue</option>
+			</select></td>
 			<td><select id="locale">
-				<option value="fr">Choisir un Pays</option>
+				<option value="fr">Choisir un fuseau horaire</option>
+<%
+	for(String f : (String[])request.getAttribute("fuseaux")){
+		String[] mode = f.split("/");
+		if(mode.length == 2){
+			String name = mode[1];
+			out.print("<option value=\""+f+"\">"+name+"</option>");
+		}
+	}
+%>
 			</select></td>
 			<td><a href="#" style="color:#FFF" onclick ="nouveauCompteur()" class="button"><i class="fa fa-plus fa-2x"></i></a></td>
 		</tr></table>
 	</div></div>
 	
 <script>
-$(function(){
-  $('#dpt').fdatepicker({
-		format: 'dd/mm/yyyy hh:ii:ss',
-		disableDblClickSelection: true,
-		language: 'vi',
-		pickTime: true
+	$(function(){
+	  $('#dpt').fdatepicker({
+			format: 'dd/mm/yyyy hh:ii:ss',
+			disableDblClickSelection: true,
+			language: 'vi',
+			pickTime: true
+		});
 	});
-});
-
-for(var pays in langues)
-{
- 	var loc = langues[pays];
- 	document.getElementById("locale").innerHTML += '<option value='+loc+'>'+pays+'</option>';
-}
-
+	
+	for(var pays in langues)
+	{
+	 	var loc = langues[pays];
+	 	document.getElementById("langue").innerHTML += '<option value='+loc+'>'+pays+'</option>';
+	}
 </script>
 </body>
 </html>

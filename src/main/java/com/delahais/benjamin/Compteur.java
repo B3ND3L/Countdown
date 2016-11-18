@@ -14,14 +14,14 @@ public class Compteur {
 	protected int id;
 	protected String name;
 	protected String deadLine;
-	protected String locale;
+	protected String langue;
 		
-	public Compteur(int id, String name, String deadLine, String locale) {
+	public Compteur(int id, String name, String deadLine, String langue) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.deadLine = deadLine;
-		this.locale =  locale;
+		this.langue =  langue;
 	}
 	
 	public int getId() {
@@ -42,38 +42,40 @@ public class Compteur {
 	public void setDeadLine(String deadLine) {
 		this.deadLine = deadLine;
 	}
-	public String getLocale() {
-		return locale;
+	public String getLangue() {
+		return langue;
 	}
-	public void setLocale(String locale) {
-		this.locale = locale;
+	public void setLangue(String langue) {
+		this.langue = langue;
 	}
 	
-	public String getLoc() throws ParseException{
+	public String translateDate() throws ParseException{
 		
+		String datetime = "";
 		String pattern = "dd/MM/yyyy HH:mm:ss";
 		Date date = new SimpleDateFormat(pattern).parse(deadLine);
-		Locale l = new Locale(locale);
-		SimpleDateFormat dateFormat = (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.FULL, l);
-		return dateFormat.format(date);
+		Locale l = new Locale(langue);
+		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.DEFAULT, l);
+		datetime = dateFormat.format(date);
+		return datetime;
 	}
 	
 	public JSONObject toJSON(String diff) throws JSONException, ParseException{
 		JSONObject json = new JSONObject();
 		json.put("id", this.id);
 		json.put("name", this.name);
-		json.put("deadline", getLoc());
-		json.put("locale", locale);
+		json.put("deadline", translateDate());
+		json.put("langue", langue);
 		if (diff != null) { json.put("diff", diff); };
 		return json;
 	}
 	
 	public static Compteur JSONtoCompteur(int id, String str){
 		JSONObject json = new JSONObject(str);
-		return new Compteur(id, json.getString("name"),json.getString("deadline"), json.getString("locale"));
+		return new Compteur(id, json.getString("name"),json.getString("deadline"), json.getString("langue"));
 	}
 	
 	public String toString(){
-		return id+" "+name+" "+deadLine+" "+locale;
+		return id+" "+name+" "+deadLine+" "+langue;
 	}
 }
