@@ -1,0 +1,33 @@
+blockquote {
+	font-style: italic;
+	padding: 20px;
+}
+
+blockquote footer{
+	color:#555;
+	font-weight: bold
+}
+body{
+	background-color: #DDD;
+}
+
+tr.pair{
+	background-color : #EEE;
+}
+
+tr.impair{
+	background-color : #CCC;
+}
+
+tr.pair a{
+	color : #EEE;
+	background-color : #F00;
+}
+
+tr.pair a:hover { background-color : #E00 }
+tr.impair a:hover { background-color : #E00 }
+tr.impair a{
+	color: #EEE;
+	background-color : #F00;
+}
+		

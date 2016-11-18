@@ -11,48 +11,12 @@
 	<link href="https://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/foundation-datepicker/1.5.5/css/foundation-datepicker.min.css" rel="stylesheet">
-	
+	<link href="myAwesomeStyle.css" rel="stylesheet">
 	
 	<script src="https://use.fontawesome.com/d608202644.js"></script>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/foundation/6.2.4/foundation.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/foundation-datepicker/1.5.5/js/foundation-datepicker.min.js"></script>
-	
-	<style>
-		blockquote {
-			font-style: italic;
-			padding: 20px;
-		}
-	
-		blockquote footer{
-			color:#555;
-			font-weight: bold
-		}
-		body{
-			background-color: #DDD;
-		}
-		
-		tr.pair{
-			background-color : #EEE;
-		}
-		
-		tr.impair{
-			background-color : #CCC;
-		}
-		
-		tr.pair a{
-			color : #EEE;
-			background-color : #F00;
-		}
-		
-		tr.pair a:hover { background-color : #E00 }
-		tr.impair a:hover { background-color : #E00 }
-		tr.impair a{
-			color: #EEE;
-			background-color : #F00;
-		}
-		
-	</style>
 	<script>
 		var socket = new WebSocket("ws://<% out.print(request.getAttribute("ip"));%>:8080/Countdown/cws");
 		<% out.print("var userid = \""+request.getAttribute("userid")+"\""); %>
