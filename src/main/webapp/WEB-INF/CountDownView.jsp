@@ -29,8 +29,29 @@
 			font-weight: bold
 		}
 		body{
-			background-color: #AAA;
+			background-color: #DDD;
 		}
+		
+		tr.pair{
+			background-color : #EEE;
+		}
+		
+		tr.impair{
+			background-color : #CCC;
+		}
+		
+		tr.pair a{
+			color : #EEE;
+			background-color : #F00;
+		}
+		
+		tr.pair a:hover { background-color : #E00 }
+		tr.impair a:hover { background-color : #E00 }
+		tr.impair a{
+			color: #EEE;
+			background-color : #F00;
+		}
+		
 	</style>
 	<script>
 		var socket = new WebSocket("ws://<% out.print(request.getAttribute("ip"));%>:8080/Countdown/cws");
@@ -46,16 +67,17 @@
 			var json = JSON.parse(e.data);
 			json.compteurs.forEach( function (c) {
 				if(c.diff !== 'undefined'){
-					document.getElementById(c.id).innerHTML = "<td>"+c.name+"</td><td>"+c.deadline+"</td><td>"+c.diff
-					+"</td><td><a href=\"#\" style=\"color:red;\" name=\""+userid+"-"+c.id+"\"" 
+					document.getElementById(c.id).innerHTML = "<td>"+c.name+"</td>"
+					+"<td>"+c.deadline+"</td>"
+					+"<td>"+c.diff+"</td>"
+					+"<td><a href=\"#\" name=\""+userid+"-"+c.id+"\"class=\"button\"" 
 					+"onclick=\"supprCompteur(this)\"><i class=\"fa fa-times fa-3x\"></i></a></td>";
 				}
 			});
-		} 
+		}
 		
-		socket.onclose = function(e){ alert('Connexion lost !');location.reload();} 
-		
-		socket.onerror = function(e){}
+		socket.onclose = function(e){} 
+		socket.onerror = function(e){alert('Connexion lost !');location.reload();}
 		
 		function nouveauCompteur(){
 			var json = {
@@ -79,28 +101,30 @@
 <% 
 	ArrayList<Compteur> al = (ArrayList<Compteur>)request.getAttribute("compteurs");
 	int i = 0;
-	for(Compteur c : al){
-		
-		out.println("<div class=\"row\"><div class=\"small-10 columns\">"
-		+"<table><tr id=\""+ c.getId() +"\" style=\"background-color:"+ ((i%2==0)?"#EEE":"#CCC") +"\">"
-		+"<td>"+c.getName()+"</td><td>"+c.getDeadLine()+"</td></tr></table>"
-		+"</div></div>");
-		i++;
+	if(al.size() > 0){
+		out.print("<div class=\"row\"><div class=\"small-12 columns\"><table>");
+		for(Compteur c : al){
+			
+			out.println("<tr id=\""+ c.getId() +"\" class=\""+ ((i%2==0)?"pair":"impair") +"\">"
+			+"<td>"+c.getName()+"</td>"
+			+"<td>"+c.getDeadLine()+"</td>"
+			+"</tr>");
+			i++;
+		}
+		out.print("</table></div></div>");
 	}
 %>
-	<div class="row">
-		<div class="small-4 columns">
-			<input type="text" placeholder="name" id="name"/>
-		</div>
-		<div class="small-4 columns">
-			<input type="text" class="span2" value="<% out.print(request.getAttribute("date")); %>" id="dpt" />
-		</div>
-		<div class="small-2 columns">
-			<a href="#" onclick ="nouveauCompteur()" class="button">Nouveau</a>
-		</div>
-		<div class="small-2 columns">
-		</div>
-	</div>
+	<div class="row"><div class="small-12 columns">
+		<table><tr>
+			<td><input type="text" placeholder="name" id="name"/></td>
+			<td><input type="text" class="span2" value="<% out.print(request.getAttribute("date")); %>" id="dpt" /></td>
+			<td><select>
+				  <option value="fr">France</option>
+				  <option value="en">USA</option>
+			</select></td>
+			<td><a href="#" style="color:#FFF" onclick ="nouveauCompteur()" class="button"><i class="fa fa-plus fa-3x"></i></a></td>
+		</tr></table>
+	</div></div>
 	
 <script>
 $(function(){
