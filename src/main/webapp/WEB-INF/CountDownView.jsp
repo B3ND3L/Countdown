@@ -47,7 +47,7 @@
 			json.compteurs.forEach( function (c) {
 				if(c.diff !== 'undefined'){
 					document.getElementById(c.id).innerHTML = "<td>"+c.name+"</td><td>"+c.deadline+"</td><td>"+c.diff
-					+"</td><td><a href=\"#\" style=\"color:red;\" name=\""+c.id+"-"+userid+"\"" 
+					+"</td><td><a href=\"#\" style=\"color:red;\" name=\""+userid+"-"+c.id+"\"" 
 					+"onclick=\"supprCompteur(this)\"><i class=\"fa fa-times fa-3x\"></i></a></td>";
 				}
 			});

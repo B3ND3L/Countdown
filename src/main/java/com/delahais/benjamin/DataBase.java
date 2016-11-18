@@ -25,22 +25,22 @@ public class DataBase {
 		
 	}
 	
-	public void insert(String userId, int id, String nom, String deadline) throws SQLException{
+	public void insert(String userid, int id, String nom, String deadline) throws SQLException{
 		PreparedStatement prep = conn.prepareStatement(
 		        "insert into compteurs values (?, ?, ?, ?);");
 		
-		prep.setString(1, userId);
+		prep.setString(1, userid);
 		prep.setInt(2, id);
 		prep.setString(3, nom);
 		prep.setString(4, deadline);
 		prep.executeUpdate();
 	}
 	
-	public void insert(String userId, Compteur compteur) throws SQLException{
+	public void insert(String userid, Compteur compteur) throws SQLException{
 		PreparedStatement prep = conn.prepareStatement(
 		        "insert into compteurs values (?, ?, ?, ?);");
 		
-		prep.setString(1, userId);
+		prep.setString(1, userid);
 		prep.setInt(2, compteur.getId());
 		prep.setString(3, compteur.getName());
 		prep.setString(4, compteur.getDeadLine());
@@ -62,10 +62,18 @@ public class DataBase {
 	    
 	    while (rs.next()) {
 	       al.add(new Compteur(rs.getInt("id"), rs.getString("name"), rs.getString("deadLine")));
-	       System.out.println("VVVVVV");
 	    }
 	    rs.close();
 	    
 		return al;
+	}
+
+	public void removeCompteur(String userid, String id) throws SQLException {
+			String sql = "DELETE FROM compteurs WHERE userid=? AND id=?;";
+			PreparedStatement prep = conn.prepareStatement(sql);
+			
+			prep.setString(1, userid);
+			prep.setInt(2, Integer.parseInt(id));
+			prep.executeUpdate();
 	}
 }

@@ -5,9 +5,13 @@ import java.math.BigInteger;
 import java.net.InetAddress;
 import java.security.SecureRandom;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
+import javax.print.attribute.standard.DateTimeAtCompleted;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -62,6 +66,10 @@ public class CountDown extends HttpServlet {
 			e.printStackTrace();
 		}
 		
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		request.setAttribute("date", sdf.format(date));
+		
 		request.setAttribute("userid", userId);
 		request.setAttribute("ip", InetAddress.getLocalHost().getHostAddress());
 		
@@ -78,4 +86,8 @@ public class CountDown extends HttpServlet {
 		 s = s.substring(0, 10);
 		 return s;
 	 }
+
+	public void removeCompteur(String userid, String id) throws SQLException {
+		db.removeCompteur(userid, id);		
+	}
 }
