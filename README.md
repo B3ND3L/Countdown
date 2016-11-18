@@ -19,5 +19,5 @@ $ mvn tomcat7:redeploy
 Pour mettre en place la partie SQL, faites :
 
 ```sh
-mysql -h localhost -u root -p < script-db.sql
+$ mysql -h localhost -u root -p < script-db.sql
 ```
