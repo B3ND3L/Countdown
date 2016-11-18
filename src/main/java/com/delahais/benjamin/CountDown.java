@@ -21,16 +21,15 @@ public class CountDown extends HttpServlet {
 	private DataBase db;
 	private SecureRandom random = new SecureRandom();
 
-	public CountDown() {
+	public CountDown() throws ClassNotFoundException, SQLException {
 		
 		connector = new WebSocketServer();
-				
+		db = new DataBase();
 		CD = this;
 	}
 
 	public ArrayList<Compteur> getCompteurs(String user) throws SQLException{
 		//SELECTION BASE DE DONNEE
-		
 		return db.requeteCapteur(user);
 	}
 	
@@ -63,7 +62,7 @@ public class CountDown extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		request.setAttribute("userId", userId);
+		request.setAttribute("userid", userId);
 		request.setAttribute("ip", InetAddress.getLocalHost().getHostAddress());
 		
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/CountDownView.jsp" ).forward( request, response );
@@ -75,6 +74,8 @@ public class CountDown extends HttpServlet {
 	}
 	
 	 public String nextSessionId() {
-		    return new BigInteger(130, random).toString(32);
-		  }
+		 String s = new BigInteger(130, random).toString(32);
+		 s = s.substring(0, 10);
+		 return s;
+	 }
 }
