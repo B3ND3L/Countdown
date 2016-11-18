@@ -57,6 +57,10 @@
 		var socket = new WebSocket("ws://<% out.print(request.getAttribute("ip"));%>:8080/Countdown/cws");
 		<% out.print("var userid = \""+request.getAttribute("userid")+"\""); %>
 		
+		var langues = {"France":"fr","Espagne":"es","Allemagne":"de","Chine":"zh","Japon":"ja","Etats Unis":"us",
+					   "Royaume Uni":"en", "Maroc":"ar","Tunisie":"ar","Italie":"it","Portugal":"pt",
+					   "Mexique":"es"};
+				
 		socket.onopen = function(e){
 			console.log(e);
 			socket.send("start-"+userid);
@@ -66,18 +70,23 @@
 			//on modifie les compteurs affichés
 			var json = JSON.parse(e.data);
 			json.compteurs.forEach( function (c) {
-				if(c.diff !== 'undefined'){
-					document.getElementById(c.id).innerHTML = "<td>"+c.name+"</td>"
-					+"<td>"+c.deadline+"</td>"
-					+"<td>"+c.diff+"</td>"
-					+"<td><a href=\"#\" name=\""+userid+"-"+c.id+"\"class=\"button\"" 
-					+"onclick=\"supprCompteur(this)\"><i class=\"fa fa-times fa-3x\"></i></a></td>";
-				}
+				document.getElementById(c.id).innerHTML = "<td>"+c.name+"</td>"
+				+"<td>"+c.deadline+"</td>"
+				+"<td>"+c.diff+"</td>"
+				+"<td>"+getPays(c.locale)+"</td>"
+				+"<td><a href=\"#\" name=\""+userid+"-"+c.id+"\"class=\"button\"" 
+				+"onclick=\"supprCompteur(this)\"><i class=\"fa fa-times fa-2x\"></i></a></td>";
 			});
 		}
 		
 		socket.onclose = function(e){} 
 		socket.onerror = function(e){alert('Connexion lost !');location.reload();}
+		
+		function getPays(locale){
+			for(var pays in langues){
+				if (langues[pays] === locale) return pays;
+			}
+		}
 		
 		function nouveauCompteur(){
 			var json = {
@@ -85,7 +94,6 @@
 					deadline : document.getElementById("dpt").value,
 					locale : document.getElementById("locale").value,
 				};
-				
 			socket.send(userid+"£"+JSON.stringify(json));
 			location.reload();
 		}
@@ -99,33 +107,39 @@
 </head>
 
 <body>
+	<div class=\"row\">
+		<div class=\"small-12 columns\">
+			<table>
+				<tr>
+					<th>Name</th>
+					<th>DeadLine</th>
+					<th>Countdown</th>
+					<th>Langue</th>
+					<th>Close</th>
+				</tr>
 <% 
 	ArrayList<Compteur> al = (ArrayList<Compteur>)request.getAttribute("compteurs");
 	int i = 0;
-	if(al.size() > 0){
-		out.print("<div class=\"row\"><div class=\"small-12 columns\"><table>");
-		for(Compteur c : al){
-			
-			out.println("<tr id=\""+ c.getId() +"\" class=\""+ ((i%2==0)?"pair":"impair") +"\">"
-			+"<td>"+c.getName()+"</td>"
-			+"<td>"+c.getDeadLine()+"</td>"
-			+"</tr>");
-			i++;
-		}
-		out.print("</table></div></div>");
+	for(Compteur c : al){
+		out.println("<tr id=\""+ c.getId() +"\" class=\""+ ((i%2==0)?"pair":"impair") +"\">"
+		+"<td hidden=\"true\">"+c.getName()+"</td>"
+		+"<td hidden=\"true\">"+c.getDeadLine()+"</td>"
+		+"</tr>");
+		i++;
 	}
+	
 %>
+			</table>
+		</div>
+	</div>
 	<div class="row"><div class="small-12 columns">
 		<table><tr>
 			<td><input type="text" placeholder="name" id="name"/></td>
 			<td><input type="text" class="span2" value="<% out.print(request.getAttribute("date")); %>" id="dpt" /></td>
 			<td><select id="locale">
-				  <option value="cn">China</option>
-				  <option value="fr">France</option>
-				  <option value="es">Spain</option>
-				  <option value="en">USA</option>
+				<option value="fr">Choisir un Pays</option>
 			</select></td>
-			<td><a href="#" style="color:#FFF" onclick ="nouveauCompteur()" class="button"><i class="fa fa-plus fa-3x"></i></a></td>
+			<td><a href="#" style="color:#FFF" onclick ="nouveauCompteur()" class="button"><i class="fa fa-plus fa-2x"></i></a></td>
 		</tr></table>
 	</div></div>
 	
@@ -138,6 +152,13 @@ $(function(){
 		pickTime: true
 	});
 });
+
+for(var pays in langues)
+{
+ 	var loc = langues[pays];
+ 	document.getElementById("locale").innerHTML += '<option value='+loc+'>'+pays+'</option>';
+}
+
 </script>
 </body>
 </html>

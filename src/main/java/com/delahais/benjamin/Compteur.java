@@ -11,20 +11,11 @@ import org.json.JSONObject;
 
 public class Compteur {
 
-	public static int IDS = 0;
 	protected int id;
 	protected String name;
 	protected String deadLine;
 	protected String locale;
-	
-	public Compteur(String name, String deadLine, String locale) {
-		super();
-		this.id = IDS++;
-		this.name = name;
-		this.deadLine = deadLine;
-		this.locale = locale;
-	}
-	
+		
 	public Compteur(int id, String name, String deadLine, String locale) {
 		super();
 		this.id = id;
@@ -63,9 +54,8 @@ public class Compteur {
 		String pattern = "dd/MM/yyyy HH:mm:ss";
 		Date date = new SimpleDateFormat(pattern).parse(deadLine);
 		Locale l = new Locale(locale);
-		DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.FULL, l);
+		SimpleDateFormat dateFormat = (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.FULL, l);
 		return dateFormat.format(date);
-		
 	}
 	
 	public JSONObject toJSON(String diff) throws JSONException, ParseException{
@@ -73,16 +63,17 @@ public class Compteur {
 		json.put("id", this.id);
 		json.put("name", this.name);
 		json.put("deadline", getLoc());
+		json.put("locale", locale);
 		if (diff != null) { json.put("diff", diff); };
 		return json;
 	}
 	
-	public static Compteur JSONtoCompteur(String str){
+	public static Compteur JSONtoCompteur(int id, String str){
 		JSONObject json = new JSONObject(str);
-		return new Compteur(json.getString("name"),json.getString("deadline"), json.getString("lang"));
+		return new Compteur(id, json.getString("name"),json.getString("deadline"), json.getString("locale"));
 	}
 	
 	public String toString(){
-		return id+" "+name+" "+deadLine;
+		return id+" "+name+" "+deadLine+" "+locale;
 	}
 }

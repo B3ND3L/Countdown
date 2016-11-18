@@ -18,13 +18,13 @@ import org.json.JSONStringer;
 public class MiseAJour extends TimerTask {
 	
 	protected Session userSession;
-	protected String userId;
+	protected String userid;
 	protected ArrayList<Compteur> compteurs;
 	
-	public MiseAJour(Session userSession, String userId) {
+	public MiseAJour(Session userSession, String userid) {
 		
 		this.userSession = userSession;
-		this.userId = userId;
+		this.userid = userid;
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class MiseAJour extends TimerTask {
 		JSONArray jList = new JSONArray();
 		
 		try {
-			for(Compteur c: CountDown.getItSelf().getCompteurs(userId)){
+			for(Compteur c: CountDown.getItSelf().getCompteurs(userid)){
 				jList.put(c.toJSON(diff(c.getDeadLine())));
 			}
 		} catch (SQLException e) {

@@ -36,7 +36,7 @@ public class CountDown extends HttpServlet {
 	
 	public void addCompteur(String user, String json) throws SQLException{
 		
-		Compteur cpt = Compteur.JSONtoCompteur(json);
+		Compteur cpt = Compteur.JSONtoCompteur(db.getMaxId(user)+1, json);
 		//Envoi du compteur dans la BDD
 		db.insert(user, cpt);
 	}

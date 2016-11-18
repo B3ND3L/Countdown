@@ -27,7 +27,7 @@ public class DataBase {
 		
 	public void insert(String userid, Compteur compteur) throws SQLException{
 		PreparedStatement prep = conn.prepareStatement(
-		        "insert into compteurs values (?, ?, ?, ?);");
+		        "insert into compteurs values (?, ?, ?, ?, ?);");
 		
 		prep.setString(1, userid);
 		prep.setInt(2, compteur.getId());
@@ -40,15 +40,11 @@ public class DataBase {
 	public void close() throws SQLException {
 		conn.close();
 	}
-
-	public String getMaxId(){
-		return "";
-	}
 	
 	public ArrayList<Compteur> requeteCapteur(String userId) throws SQLException{
 		
 		ArrayList<Compteur> al = new ArrayList<Compteur>();
-	    ResultSet rs = stat.executeQuery("select id, name, deadline from compteurs where userid='"+userId+"';");
+	    ResultSet rs = stat.executeQuery("select id, name, deadline, locale from compteurs where userid='"+userId+"';");
 	    
 	    while (rs.next()) {
 	       al.add(new Compteur(rs.getInt("id"), rs.getString("name"), rs.getString("deadLine"), rs.getString("locale")));
@@ -58,6 +54,16 @@ public class DataBase {
 		return al;
 	}
 
+	public int getMaxId(String userid) throws SQLException{
+		ResultSet rs = stat.executeQuery("select max(id) from compteurs where userid='"+userid+"';");
+		int i = 0; 
+		while (rs.next()) {
+		      i = rs.getInt("Max(id)");
+		 }
+		 rs.close();
+		return i;
+	}
+	
 	public void removeCompteur(String userid, String id) throws SQLException {
 			String sql = "DELETE FROM compteurs WHERE userid=? AND id=?;";
 			PreparedStatement prep = conn.prepareStatement(sql);
