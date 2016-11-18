@@ -1,5 +1,7 @@
 CREATE DATABASE Countdown;
 
-CREATE USER 'username'@'%' IDENTIFIED WITH mysql_native_password AS 'password';GRANT ALL PRIVILEGES ON *.* TO 'username'@'%' REQUIRE NONE WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;GRANT ALL PRIVILEGES ON `Countdown`.* TO 'username'@'%';
+CREATE USER 'username'@'%' IDENTIFIED WITH mysql_native_password AS 'password';
+GRANT ALL PRIVILEGES ON `Countdown`.* TO 'username'@'%';
+FLUSH PRIVILEGES;
 
 CREATE TABLE `Countdown`.`compteurs` ( `userid` VARCHAR(25) NOT NULL , `id` INT NOT NULL , `name` VARCHAR(20) NOT NULL , `deadline` VARCHAR(20) NOT NULL ) ENGINE = InnoDB
