@@ -95,7 +95,7 @@ public class MiseAJour extends TimerTask {
 		long diffMinutes = diff / (60 * 1000) % 60;
 		long diffHours = diff / (60 * 60 * 1000) % 24;
 		long diffDays = diff / (24 * 60 * 60 * 1000);
-		return diffDays+" "+jours.get(lang)+" "+diffHours+" "+heures.get(lang)+" "+diffMinutes+" minute(s) "+diffSeconds+" seconde(s)";
+		return diffDays+" "+jours.get(lang)+" "+diffHours+" "+heures.get(lang)+" "+diffMinutes+" "+minutes.get(lang)+" "+diffSeconds+" "+secondes.get(lang);
 
 	}
 	
