@@ -21,9 +21,9 @@
 		var socket = new WebSocket("ws://<% out.print(request.getAttribute("ip"));%>:8080/Countdown/cws");
 		<% out.print("var userid = \""+request.getAttribute("userid")+"\""); %>
 		
-		var langues = {"France":"fr","Espagne":"es","Allemagne":"de","Chine":"zh","Japon":"ja","Etats Unis":"us",
-					   "Royaume Uni":"en", "Maroc":"ar","Tunisie":"ar","Italie":"it","Portugal":"pt",
-					   "Mexique":"es"};
+		var langues = {"Français":"fr","Español":"es","Deutsch":"de","中国":"zh","日本の":"ja","American":"us",
+					   "English":"en", "مغربي":"ar","التونسية":"ar","Italiano":"it","português":"pt",
+					   "Mexicano":"es"};
 				
 		socket.onopen = function(e){
 			console.log(e);
