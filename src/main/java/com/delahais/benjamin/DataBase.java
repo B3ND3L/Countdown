@@ -14,7 +14,7 @@ public class DataBase {
 	protected Statement stat;
 	
 	public DataBase() throws SQLException, ClassNotFoundException{
-		Class.forName("com.mysql.jdbc.Driver");
+		Class.forName("com.mysql.cj.jdbc.Driver");
 		this.conn = DriverManager.getConnection("jdbc:mysql://localhost/Countdown?user=username&password=password");
 		stat = conn.createStatement();
 			
@@ -24,18 +24,7 @@ public class DataBase {
 				+ "`deadline` VARCHAR(20) NOT NULL ) ENGINE = InnoDB;");	*/
 		
 	}
-	
-	public void insert(String userid, int id, String nom, String deadline) throws SQLException{
-		PreparedStatement prep = conn.prepareStatement(
-		        "insert into compteurs values (?, ?, ?, ?);");
 		
-		prep.setString(1, userid);
-		prep.setInt(2, id);
-		prep.setString(3, nom);
-		prep.setString(4, deadline);
-		prep.executeUpdate();
-	}
-	
 	public void insert(String userid, Compteur compteur) throws SQLException{
 		PreparedStatement prep = conn.prepareStatement(
 		        "insert into compteurs values (?, ?, ?, ?);");
@@ -44,6 +33,7 @@ public class DataBase {
 		prep.setInt(2, compteur.getId());
 		prep.setString(3, compteur.getName());
 		prep.setString(4, compteur.getDeadLine());
+		prep.setString(5, compteur.getLocale());
 		prep.executeUpdate();
 	}
 	
@@ -61,7 +51,7 @@ public class DataBase {
 	    ResultSet rs = stat.executeQuery("select id, name, deadline from compteurs where userid='"+userId+"';");
 	    
 	    while (rs.next()) {
-	       al.add(new Compteur(rs.getInt("id"), rs.getString("name"), rs.getString("deadLine")));
+	       al.add(new Compteur(rs.getInt("id"), rs.getString("name"), rs.getString("deadLine"), rs.getString("locale")));
 	    }
 	    rs.close();
 	    

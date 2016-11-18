@@ -1,5 +1,12 @@
 package com.delahais.benjamin;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Compteur {
@@ -8,19 +15,22 @@ public class Compteur {
 	protected int id;
 	protected String name;
 	protected String deadLine;
+	protected String locale;
 	
-	public Compteur(String name, String deadLine) {
+	public Compteur(String name, String deadLine, String locale) {
 		super();
 		this.id = IDS++;
 		this.name = name;
 		this.deadLine = deadLine;
+		this.locale = locale;
 	}
 	
-	public Compteur(int id, String name, String deadLine) {
+	public Compteur(int id, String name, String deadLine, String locale) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.deadLine = deadLine;
+		this.locale =  locale;
 	}
 	
 	public int getId() {
@@ -41,19 +51,35 @@ public class Compteur {
 	public void setDeadLine(String deadLine) {
 		this.deadLine = deadLine;
 	}
+	public String getLocale() {
+		return locale;
+	}
+	public void setLocale(String locale) {
+		this.locale = locale;
+	}
 	
-	public JSONObject toJSON(String diff){
+	public String getLoc() throws ParseException{
+		
+		String pattern = "dd/MM/yyyy HH:mm:ss";
+		Date date = new SimpleDateFormat(pattern).parse(deadLine);
+		Locale l = new Locale(locale);
+		DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.FULL, l);
+		return dateFormat.format(date);
+		
+	}
+	
+	public JSONObject toJSON(String diff) throws JSONException, ParseException{
 		JSONObject json = new JSONObject();
 		json.put("id", this.id);
 		json.put("name", this.name);
-		json.put("deadline", this.deadLine);
+		json.put("deadline", getLoc());
 		if (diff != null) { json.put("diff", diff); };
 		return json;
 	}
 	
 	public static Compteur JSONtoCompteur(String str){
 		JSONObject json = new JSONObject(str);
-		return new Compteur(json.getString("name"),json.getString("deadline"));
+		return new Compteur(json.getString("name"),json.getString("deadline"), json.getString("lang"));
 	}
 	
 	public String toString(){

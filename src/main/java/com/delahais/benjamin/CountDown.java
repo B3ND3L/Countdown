@@ -5,13 +5,10 @@ import java.math.BigInteger;
 import java.net.InetAddress;
 import java.security.SecureRandom;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
-import javax.print.attribute.standard.DateTimeAtCompleted;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -48,20 +45,20 @@ public class CountDown extends HttpServlet {
 	public void doGet( HttpServletRequest request, HttpServletResponse response )
 		throws ServletException, IOException {
 			
-		String userId = "";
+		String userid = "";
 		Cookie [] cooks = request.getCookies();
 		//Si des cookies existent, on les lit
 		if(cooks != null && cooks.length >= 2){
-			userId = cooks[1].getValue();
+			userid = cooks[1].getValue();
 		//Sinon c'est que c'est la première connection du client
 		} else {
-			userId = nextSessionId();
-			response.addCookie(new Cookie("userId", userId));
+			userid = nextSessionId();
+			response.addCookie(new Cookie("userid", userid));
 		}
 		
 		//RECUPERATION DES COMPTEURS PAR LA BDD
 		try {
-			request.setAttribute("compteurs", getCompteurs(userId));
+			request.setAttribute("compteurs", getCompteurs(userid));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -70,7 +67,7 @@ public class CountDown extends HttpServlet {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		request.setAttribute("date", sdf.format(date));
 		
-		request.setAttribute("userid", userId);
+		request.setAttribute("userid", userid);
 		request.setAttribute("ip", InetAddress.getLocalHost().getHostAddress());
 		
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/CountDownView.jsp" ).forward( request, response );
@@ -81,7 +78,7 @@ public class CountDown extends HttpServlet {
 		return CD;
 	}
 	
-	 public String nextSessionId() {
+	public String nextSessionId() {
 		 String s = new BigInteger(130, random).toString(32);
 		 s = s.substring(0, 10);
 		 return s;

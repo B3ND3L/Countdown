@@ -83,6 +83,7 @@
 			var json = {
 					name : document.getElementById("name").value, 
 					deadline : document.getElementById("dpt").value,
+					locale : document.getElementById("locale").value,
 				};
 				
 			socket.send(userid+"£"+JSON.stringify(json));
@@ -118,8 +119,10 @@
 		<table><tr>
 			<td><input type="text" placeholder="name" id="name"/></td>
 			<td><input type="text" class="span2" value="<% out.print(request.getAttribute("date")); %>" id="dpt" /></td>
-			<td><select>
+			<td><select id="locale">
+				  <option value="cn">China</option>
 				  <option value="fr">France</option>
+				  <option value="es">Spain</option>
 				  <option value="en">USA</option>
 			</select></td>
 			<td><a href="#" style="color:#FFF" onclick ="nouveauCompteur()" class="button"><i class="fa fa-plus fa-3x"></i></a></td>

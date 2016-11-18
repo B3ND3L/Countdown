@@ -11,6 +11,7 @@ import javax.websocket.Session;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONStringer;
 
 
@@ -37,6 +38,12 @@ public class MiseAJour extends TimerTask {
 				jList.put(c.toJSON(diff(c.getDeadLine())));
 			}
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
