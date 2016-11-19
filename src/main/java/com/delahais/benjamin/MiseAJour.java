@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.TimeZone;
 import java.util.TimerTask;
 
 import javax.websocket.Session;
@@ -67,7 +68,7 @@ public class MiseAJour extends TimerTask {
 		
 		try {
 			for(Compteur c: CountDown.getItSelf().getCompteurs(userid)){
-				jList.put(c.toJSON(diff(c.getDeadLine(), c.getLangue())));
+				jList.put(c.toJSON(diff(c.getDeadLine(), c.getLangue(), c.getLocale())));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -84,11 +85,13 @@ public class MiseAJour extends TimerTask {
 		userSession.getAsyncRemote().sendText(json.toString());
 	}
 
-	private String diff(String theDate, String lang){
+	private String diff(String theDate, String lang, String locale){
 		String pattern = "dd/MM/yyyy HH:mm:ss";
 		Date d2 = null;
 		try {
-			d2 = new SimpleDateFormat(pattern).parse(theDate);
+			SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+			sdf.setTimeZone(TimeZone.getTimeZone(locale));
+			d2 = sdf.parse(theDate);
 		} catch (ParseException e) {
 			return "server error...";
 		}

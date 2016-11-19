@@ -15,13 +15,15 @@ public class Compteur {
 	protected String name;
 	protected String deadLine;
 	protected String langue;
+	protected String locale;
 		
-	public Compteur(int id, String name, String deadLine, String langue) {
+	public Compteur(int id, String name, String deadLine, String langue, String locale) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.deadLine = deadLine;
 		this.langue =  langue;
+		this.locale = locale;
 	}
 	
 	public int getId() {
@@ -48,6 +50,12 @@ public class Compteur {
 	public void setLangue(String langue) {
 		this.langue = langue;
 	}
+	public String getLocale() {
+		return locale;
+	}
+	public void setLoacale(String locale) {
+		this.locale = locale;
+	}
 	
 	public String translateDate() throws ParseException{
 		
@@ -66,16 +74,17 @@ public class Compteur {
 		json.put("name", this.name);
 		json.put("deadline", translateDate());
 		json.put("langue", langue);
+		json.put("locale", locale);
 		if (diff != null) { json.put("diff", diff); };
 		return json;
 	}
 	
 	public static Compteur JSONtoCompteur(int id, String str){
 		JSONObject json = new JSONObject(str);
-		return new Compteur(id, json.getString("name"),json.getString("deadline"), json.getString("langue"));
+		return new Compteur(id, json.getString("name"),json.getString("deadline"), json.getString("langue"), json.getString("locale"));
 	}
 	
 	public String toString(){
-		return id+" "+name+" "+deadLine+" "+langue;
+		return id+" "+name+" "+deadLine+" "+langue+" "+locale;
 	}
 }

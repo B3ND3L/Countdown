@@ -35,6 +35,7 @@
 			json.compteurs.forEach( function (c) {
 				document.getElementById(c.id).innerHTML = "<td>"+c.name+"</td>"
 				+"<td>"+c.deadline+"</td>"
+				+"<td>"+c.locale+"</td>"
 				+"<td>"+c.diff+"</td>"
 				+"<td>"+getPays(c.langue)+"</td>"
 				+"<td><a href=\"#\" name=\""+userid+"-"+c.id+"\"class=\"button\"" 
@@ -56,6 +57,7 @@
 					name : document.getElementById("name").value, 
 					deadline : document.getElementById("dpt").value,
 					langue : document.getElementById("langue").value,
+					locale : document.getElementById("locale").value,
 				};
 			socket.send(userid+"£"+JSON.stringify(json));
 			setTimeout(function(){location.reload();}, 250);
@@ -76,8 +78,8 @@
 				<tr>
 					<th>Name</th>
 					<th>DeadLine</th>
-					<th>Countdown</th>
 					<th>Fuseau Horaire</th>
+					<th>Countdown</th>
 					<th>Langue</th>
 					<th>Close</th>
 				</tr>
@@ -88,10 +90,11 @@
 		out.println("<tr id=\""+ c.getId() +"\" class=\""+ ((i%2==0)?"pair":"impair") +"\">"
 		+"<td hidden=\"true\">"+c.getName()+"</td>"
 		+"<td hidden=\"true\">"+c.getDeadLine()+"</td>"
+		+"<td hidden=\"true\">"+c.getLocale()+"</td>"
+		+"<td hidden=\"true\">"+c.getLangue()+"</td>"
 		+"</tr>");
 		i++;
 	}
-	
 %>
 			</table>
 		</div>
@@ -103,17 +106,21 @@
 			<td><select id="langue">
 				<option value="fr">Choisir une langue</option>
 			</select></td>
-			<td><select id="locale">
-				<option value="fr">Choisir un fuseau horaire</option>
+			<td><select id="continent" onchange="show()">
+				<option value="none">Choisir un continent</option>
 <%
+	String prevName = "";
 	for(String f : (String[])request.getAttribute("fuseaux")){
 		String[] mode = f.split("/");
-		if(mode.length == 2){
-			String name = mode[1];
-			out.print("<option value=\""+f+"\">"+name+"</option>");
+		if(mode.length == 2 && (!(mode[0].equals("Etc")||mode[0].equals("SystemV"))) && (!mode[0].equals(prevName))){
+			out.print("<option>"+mode[0]+"</option>");
+			prevName = mode[0];
 		}
 	}
 %>
+			</select></td>
+			<td><select id="locale" disabled>
+				<option>Choisir un fuseau horaire</option>
 			</select></td>
 			<td><a href="#" style="color:#FFF" onclick ="nouveauCompteur()" class="button"><i class="fa fa-plus fa-2x"></i></a></td>
 		</tr></table>
@@ -134,6 +141,47 @@
 	 	var loc = langues[pays];
 	 	document.getElementById("langue").innerHTML += '<option value='+loc+'>'+pays+'</option>';
 	}
+<%
+	prevName = "";
+	for(String f : (String[])request.getAttribute("fuseaux")){
+		String[] mode = f.split("/");
+		if(mode.length == 2 && (!(mode[0].equals("Etc")||mode[0].equals("SystemV"))) && (!mode[0].equals(prevName))){
+			out.print("var "+mode[0]+"=[];");
+			prevName = mode[0];
+		}
+	}
+	
+	for(String f : (String[])request.getAttribute("fuseaux")){
+		String[] mode = f.split("/");
+		if(mode.length == 2 && (!(mode[0].equals("Etc")||mode[0].equals("SystemV")))){
+			out.print(mode[0]+".push(\""+mode[mode.length-1]+"\");");
+		}
+	}
+	
+	out.print("var arrayFuseaux={");
+	prevName = "";
+	for(String f : (String[])request.getAttribute("fuseaux")){
+		String[] mode = f.split("/");
+		if(mode.length == 2 && (!(mode[0].equals("Etc")||mode[0].equals("SystemV"))) && (!mode[0].equals(prevName))){
+			out.print("\""+mode[0]+"\":"+mode[0]+",");
+			prevName=mode[0];
+		}
+	}
+	out.print("};");
+%>
+function show(){
+	var continent = document.getElementById("continent");
+	var select = document.getElementById("locale");
+	if(continent.value === 'none'){
+		select.disabled = true;
+	} else {
+		select.innerHTML = "<option>Choisir un fuseau horaire</option>";
+		arrayFuseaux[continent.value].forEach(function(p){
+			select.innerHTML += "<option value=\""+continent.value+"/"+p+"\">"+p+"</option>";
+		});
+		select.disabled = false;
+	}
+}
 </script>
 </body>
 </html>

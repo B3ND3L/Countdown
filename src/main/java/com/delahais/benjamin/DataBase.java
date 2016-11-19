@@ -21,13 +21,14 @@ public class DataBase {
 		
 	public void insert(String userid, Compteur compteur) throws SQLException{
 		PreparedStatement prep = conn.prepareStatement(
-		        "insert into compteurs values (?, ?, ?, ?, ?,'coucou');");
+		        "insert into compteurs values (?, ?, ?, ?, ?, ?);");
 		
 		prep.setString(1, userid);
 		prep.setInt(2, compteur.getId());
 		prep.setString(3, compteur.getName());
 		prep.setString(4, compteur.getDeadLine());
 		prep.setString(5, compteur.getLangue());
+		prep.setString(6, compteur.getLocale());
 		prep.executeUpdate();
 	}
 	
@@ -38,13 +39,12 @@ public class DataBase {
 	public ArrayList<Compteur> requeteCapteur(String userId) throws SQLException{
 		
 		ArrayList<Compteur> al = new ArrayList<Compteur>();
-	    ResultSet rs = stat.executeQuery("select id, name, deadline, langue from compteurs where userid='"+userId+"';");
+	    ResultSet rs = stat.executeQuery("select id, name, deadline, langue, locale from compteurs where userid='"+userId+"';");
 	    
 	    while (rs.next()) {
-	       al.add(new Compteur(rs.getInt("id"), rs.getString("name"), rs.getString("deadLine"), rs.getString("langue")));
+	       al.add(new Compteur(rs.getInt("id"), rs.getString("name"), rs.getString("deadLine"), rs.getString("langue"), rs.getString("locale")));
 	    }
 	    rs.close();
-	    
 		return al;
 	}
 

@@ -54,16 +54,15 @@ public class WebSocketServer {
     @OnMessage
     public void onMessage(String message, Session userSession) throws SQLException {
     	if(message.contains("£")){
-    		String [] messages = message.split("£");
-    	    
-    		for(String str : messages) System.out.println(str);
     		
+    		String [] messages = message.split("£");    		
     		CountDown.getItSelf().addCompteur(messages[0], messages[1]);
     	
     	} else if(message.contains("start")) {
     	
     		String [] messages = message.split("-");
     		t.schedule(new MiseAJour(userSession, messages[1]), 1000, 1000);
+    	
     	} else if(message.contains("delete")) {
     	
 			String [] messages = message.split("-");
