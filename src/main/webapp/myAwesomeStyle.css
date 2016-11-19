@@ -1,22 +1,15 @@
-blockquote {
-	font-style: italic;
-	padding: 20px;
-}
-
-blockquote footer{
-	color:#555;
-	font-weight: bold
-}
 body{
-	background-color: #DDD;
+	background-color: #89a6d1;
 }
-
+table.count{
+	margin-top : 5%;
+}
 tr.pair{
-	background-color : #EEE;
+	background-color : rgba(255,255,255,0.1);
 }
 
 tr.impair{
-	background-color : #CCC;
+	background-color : rgba(0,0,0,0.1);
 }
 
 tr.pair a{
