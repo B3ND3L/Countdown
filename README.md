@@ -24,9 +24,9 @@ $ mysql -h localhost -u root -p < script-db.sql
 Ce script considère que la base de données Countdown exist déjà.
 
 Si vous voulez utiliser une autre base de données vous pouvez configurer ça en modifiant:
-	- Le nom de la base de données (ici Countdown)
-	- Le nom de l'utilisateur (ici username) 
-	- Le mot de passe (ici password)
+  - Le nom de la base de données (ici Countdown)
+  - Le nom de l'utilisateur (ici username) 
+  - Le mot de passe (ici password)
 
 ```java
 this.conn = DriverManager.getConnection("jdbc:mysql://localhost/Countdown?user=username&password=password");
